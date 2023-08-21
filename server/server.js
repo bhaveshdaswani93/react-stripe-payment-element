@@ -17,9 +17,26 @@ app.get("/", (req, res) => {
 
 app.get("/config", (req, res) => {
   res.send({
-    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    publishableKey: 'pk_test_51MtSZpBFNANcjAh5TLuOoq8BVzEammEEeVvT9rtbKtsZPu7C1s0duqTiVcuxFFY364btF9nVDBj57HMDH1mRED9H00bKAgdYP1',
   });
 });
+
+app.post("/create-token", async (req, res) => {
+  const stripe = require('stripe')('sk_test_51MtSZpBFNANcjAh5Trrd4oxVxC1zz6oWZcT6tAVGsTh9qvicAbaiwc2yvuiQfICAY6bHuiX6fhMJ9nE7wyzsgXea00exjH2PyP');
+
+  const token = await stripe.tokens.create({
+    card: {
+      number: '4242424242424242',
+      exp_month: 6,
+      exp_year: 2024,
+      cvc: '314',
+    },
+  });
+
+  res.send({
+    token,
+  });
+})
 
 app.post("/create-payment-intent", async (req, res) => {
   try {
@@ -29,9 +46,12 @@ app.post("/create-payment-intent", async (req, res) => {
       automatic_payment_methods: { enabled: true },
     });
 
+    console.log(paymentIntent);
+    const clientSecret = "pi_3NBFdpBFNANcjAh51wwhgZMe_secret_o9yfXLTlEOohWzU3QTnPndIkG";
+
     // Send publishable key and PaymentIntent details to client
     res.send({
-      clientSecret: paymentIntent.client_secret,
+      clientSecret: clientSecret,
     });
   } catch (e) {
     return res.status(400).send({

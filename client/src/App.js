@@ -3,6 +3,9 @@ import Payment from "./Payment";
 import Completion from "./Completion";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SaveCardForm from './StripeCardToken';
+import PaymentCard from './PaymentCard';
+import CardToken from './CardToken';
 
 function App() {
   return (
@@ -11,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Payment />} />
           <Route path="/completion" element={<Completion />} />
+          <Route path="/card-token" element={<PaymentCard />} />
         </Routes>
       </BrowserRouter>
     </main>
